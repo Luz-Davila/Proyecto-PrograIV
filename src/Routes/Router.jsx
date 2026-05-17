@@ -1,34 +1,41 @@
 import {
-  createRootRoute,
-  createRoute,
-  createRouter,
-  Outlet,
+    createRootRoute,
+    createRoute,
+    createRouter,
+    Link,
+    Outlet
 } from "@tanstack/react-router";
 
-// Layout principal
+import Home from "../Pages/Home";
+
+
 const rootRoute = createRootRoute({
-  component: function RootLayout() {
-    return (
-      <section style={{ padding: "1rem" }}>
-        <Outlet />
-      </section>
-    );
-  },
+    component: function RootLayout() {
+        return (
+            <>
+                <nav style={{ display: "flex", gap: "1rem", padding: "1rem" }}>
+                    <Link to="/" activeProps={{ style: { fontWeight: "bold" } }}>
+                        Home
+                    </Link>
+                </nav>
+                <section id="center">
+                    <Outlet />
+                </section>
+            </>
+        );
+    },
 });
 
-// Home
 const homeRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  path: "/",
-  component: () => <h1>Home</h1>,
+    getParentRoute: () => rootRoute,
+    path: "/",
+    component: Home,
 });
 
-// Árbol
-const routeTree = rootRoute.addChildren([
-  homeRoute,
-]);
 
-// Router
+
+const routeTree = rootRoute.addChildren([homeRoute]);
+
 export const router = createRouter({
-  routeTree,
+    routeTree,
 });
