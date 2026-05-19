@@ -2,25 +2,23 @@ import {
     createRootRoute,
     createRoute,
     createRouter,
-    Link,
     Outlet
 } from "@tanstack/react-router";
 
-import Home from "../Pages/Home";
+import Home from "../Pages/Home/Home";
+import Navbar from "../Components/Navbar";
+import Footer from "../Components/Footer";
 
 
 const rootRoute = createRootRoute({
     component: function RootLayout() {
         return (
             <>
-                <nav style={{ display: "flex", gap: "1rem", padding: "1rem" }}>
-                    <Link to="/" activeProps={{ style: { fontWeight: "bold" } }}>
-                        Home
-                    </Link>
-                </nav>
+                <Navbar />
                 <section id="center">
                     <Outlet />
                 </section>
+                <Footer />
             </>
         );
     },
