@@ -6,8 +6,9 @@ import {
 } from "@tanstack/react-router";
 
 import Home from "../Pages/Home/Home";
-import Navbar from "../Components/Navbar";
-import Footer from "../Components/Footer";
+import Navbar from "../Components/Navbar/Navbar";
+import Footer from "../Components/Footer/Footer";
+import Admin from "../Pages/Admin/Admin";
 
 
 const rootRoute = createRootRoute({
@@ -30,9 +31,15 @@ const homeRoute = createRoute({
     component: Home,
 });
 
+const adminRoute = createRoute({
+    getParentRoute: () => rootRoute,
+    path: "/directorio",
+    component: Admin,
+});
 
 
-const routeTree = rootRoute.addChildren([homeRoute]);
+
+const routeTree = rootRoute.addChildren([homeRoute, adminRoute]);
 
 export const router = createRouter({
     routeTree,
