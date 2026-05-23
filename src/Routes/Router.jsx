@@ -7,7 +7,7 @@ import {
 } from "@tanstack/react-router";
 
 import Home from "../Pages/Home";
-
+import Inventario from "../Pages/Inventario/Inventario";
 
 const rootRoute = createRootRoute({
     component: function RootLayout() {
@@ -17,6 +17,11 @@ const rootRoute = createRootRoute({
                     <Link to="/" activeProps={{ style: { fontWeight: "bold" } }}>
                         Home
                     </Link>
+
+                     <Link to="/inventario" activeProps={{ style: { fontWeight: "bold" } }}>
+                        Inventario
+                    </Link>
+
                 </nav>
                 <section id="center">
                     <Outlet />
@@ -32,9 +37,17 @@ const homeRoute = createRoute({
     component: Home,
 });
 
+const inventarioRoute = createRoute({
+    getParentRoute: () => rootRoute,
+    path: "/inventario",
+    component: Inventario,
+});
 
+const routeTree = rootRoute.addChildren([
+    homeRoute,
+    inventarioRoute
+]);
 
-const routeTree = rootRoute.addChildren([homeRoute]);
 
 export const router = createRouter({
     routeTree,
