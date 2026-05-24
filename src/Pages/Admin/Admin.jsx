@@ -1,4 +1,4 @@
-import './admin.css'
+import './Admin.css'
 import { useEffect, useState, useMemo } from 'react'
 
 function Admin() {
