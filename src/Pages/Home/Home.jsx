@@ -115,11 +115,11 @@ export default function Home() {
         <div className="hero-overlay" />
         <div className="hero-content">
           <h1>
-            Asegurando el Agua del Futuro
+            Tu ASADA
             <br />
-            <span>para Pueblo Nuevo</span>
+            <span>más cerca que nunca</span>
           </h1>
-          <p>Gestión moderna y eficiente del agua potable para nuestra comunidad</p>
+          <p>Consultá, gestioná y mantenete informado desde un solo lugar</p>
         </div>
       </section>
 
@@ -206,31 +206,6 @@ export default function Home() {
               Ver en Google Maps
             </a>
           </div>
-        </div>
-      </section>
-
-      {/* Transparencia */}
-      <section className="transparencia-section">
-        <div className="transparencia-header">
-          <div>
-            <h2 className="section-title section-title--white">
-              Transparencia y Rendición de Cuentas
-            </h2>
-            <p className="transparencia-intro">
-              Todos los informes, actas y mediciones están disponibles para que la comunidad conozca cómo y en qué se invierte cada recurso, asegurando una gestión clara y responsable
-            </p>
-          </div>
-        </div>
-
-        <div className="transparencia-grid">
-          {transparencia.map((t, i) => (
-            <div className="trans-card" key={i}>
-              <span className="trans-emoji">{t.emoji}</span>
-              <h4>{t.titulo}</h4>
-              <p>{t.desc}</p>
-              <span className="trans-sub">{t.sub}</span>
-            </div>
-          ))}
         </div>
       </section>
 
