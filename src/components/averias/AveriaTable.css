@@ -1,0 +1,281 @@
+.tabla-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 20px;
+}
+
+.tabla-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.titulo-tabla {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #0b5c75;
+  font-size: 28px;
+  margin: 0;
+}
+
+.cantidad-averias {
+  color: #666;
+  font-size: 14px;
+  background: #f0f8fb;
+  padding: 8px 16px;
+  border-radius: 20px;
+  margin: 0;
+}
+
+.sin-datos {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+  color: #999;
+}
+
+.sin-datos svg {
+  margin-bottom: 15px;
+  color: #ccc;
+}
+
+.sin-datos p {
+  font-size: 16px;
+  color: #999;
+}
+
+/* GRID DE TARJETAS */
+
+.grid-averias {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+@media (max-width: 768px) {
+  .grid-averias {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* TARJETA INDIVIDUAL */
+
+.tarjeta-averia {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: all 0.3s ease;
+  border-left: 5px solid #0b5c75;
+}
+
+.tarjeta-averia:hover {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+  transform: translateY(-4px);
+}
+
+/* ENCABEZADO DE TARJETA */
+
+.tarjeta-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(135deg, #0b5c75 0%, #0d7a94 100%);
+  color: white;
+  padding: 15px 20px;
+}
+
+.id-averia {
+  font-size: 14px;
+  font-weight: bold;
+  opacity: 0.9;
+}
+
+/* BADGES DE ESTADO */
+
+.badge-estado {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.badge-pendiente {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.badge-proceso {
+  background-color: #d1ecf1;
+  color: #0c5460;
+}
+
+.badge-resuelto {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+/* CUERPO DE TARJETA */
+
+.tarjeta-body {
+  padding: 20px;
+}
+
+.averia-fila {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 18px;
+}
+
+.averia-fila:last-child {
+  margin-bottom: 0;
+}
+
+.averia-icono {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: #f0f8fb;
+  border-radius: 8px;
+  color: #0b5c75;
+  flex-shrink: 0;
+}
+
+.averia-label {
+  font-size: 12px;
+  color: #999;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 0 0 4px 0;
+  font-weight: 600;
+}
+
+.averia-valor {
+  font-size: 15px;
+  color: #333;
+  margin: 0;
+  font-weight: 500;
+}
+
+.descripcion-texto {
+  font-size: 14px;
+  line-height: 1.4;
+  color: #555;
+  max-height: 100px;
+  overflow: auto;
+}
+
+/* PIE DE TARJETA */
+
+.tarjeta-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  background: #f9fafb;
+  border-top: 1px solid #e5e7eb;
+}
+
+.prioridad-container,
+.fecha-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #666;
+}
+
+.prioridad-container svg,
+.fecha-container svg {
+  color: #0b5c75;
+}
+
+.prioridad-badge {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.prioridad-baja {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+
+.prioridad-media {
+  background-color: #fff3e0;
+  color: #f57c00;
+}
+
+.prioridad-alta {
+  background-color: #ffebee;
+  color: #c62828;
+}
+
+/* IMAGEN DE AVERÍA */
+
+.tarjeta-imagen {
+  max-height: 200px;
+  overflow: hidden;
+  background: #f0f8fb;
+  border-top: 1px solid #e5e7eb;
+}
+
+.imagen-averia {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 480px) {
+  .tabla-container {
+    padding: 10px;
+  }
+
+  .tabla-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .titulo-tabla {
+    font-size: 24px;
+  }
+
+  .grid-averias {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  .averia-fila {
+    gap: 12px;
+  }
+
+  .averia-icono {
+    width: 28px;
+    height: 28px;
+  }
+
+  .tarjeta-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+}
