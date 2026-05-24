@@ -2,22 +2,32 @@ import {
     createRootRoute,
     createRoute,
     createRouter,
-    Outlet
+    Outlet,
+    Link
 } from "@tanstack/react-router";
+
 import Home from "../Pages/Home/Home";
-import Abonados from "../Pages/Abonados/Abonados";
-import Navbar from "../Components/Navbar/Navbar";
+import Inventario from "../Pages/Inventario/Inventario";
 import Footer from "../Components/Footer/Footer";
-import Admin from "../Pages/Admin/Admin";
 
 const rootRoute = createRootRoute({
     component: function RootLayout() {
         return (
             <>
-                <Navbar />
+                <nav style={{ display: "flex", gap: "1rem", padding: "1rem" }}>
+                    <Link to="/" activeProps={{ style: { fontWeight: "bold" } }}>
+                        Home
+                    </Link>
+
+                    <Link to="/inventario" activeProps={{ style: { fontWeight: "bold" } }}>
+                        Inventario
+                    </Link>
+                </nav>
+
                 <section id="center">
                     <Outlet />
                 </section>
+
                 <Footer />
             </>
         );
@@ -30,19 +40,16 @@ const homeRoute = createRoute({
     component: Home,
 });
 
-const abonadosRoute = createRoute({
+const inventarioRoute = createRoute({
     getParentRoute: () => rootRoute,
-    path: "/padron",
-    component: Abonados,
+    path: "/inventario",
+    component: Inventario,
 });
 
-const adminRoute = createRoute({
-    getParentRoute: () => rootRoute,
-    path: "/directorio",
-    component: Admin,
-});
-
-const routeTree = rootRoute.addChildren([homeRoute, abonadosRoute, adminRoute]);
+const routeTree = rootRoute.addChildren([
+    homeRoute,
+    inventarioRoute
+]);
 
 export const router = createRouter({
     routeTree,
