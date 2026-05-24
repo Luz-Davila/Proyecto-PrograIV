@@ -1,14 +1,19 @@
 import './admin.css'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useMemo } from 'react'
 
 function Admin() {
 
   const [users, setUsers] = useState([])
 
-  const [filteredUsers, setFilteredUsers] =
-    useState([])
-
   const [search, setSearch] = useState('')
+
+  const filteredUsers = useMemo(() => {
+    return users.filter((user) =>
+      (user.name || '')
+        .toLowerCase()
+        .includes(search.toLowerCase())
+    )
+  }, [users, search])
 
   const [loading, setLoading] =
     useState(true)
@@ -53,8 +58,6 @@ function Admin() {
 
         setUsers(data.record)
 
-        setFilteredUsers(data.record)
-
         setLoading(false)
       })
 
@@ -69,18 +72,7 @@ function Admin() {
 
   }, [])
 
-  useEffect(() => {
-
-    const filtered = users.filter((user) =>
-
-      user.name
-        .toLowerCase()
-        .includes(search.toLowerCase())
-    )
-
-    setFilteredUsers(filtered)
-
-  }, [search, users])
+  
 
   const getCedula = (user) => {
     return (
