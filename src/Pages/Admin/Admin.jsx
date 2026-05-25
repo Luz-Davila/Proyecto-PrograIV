@@ -24,6 +24,12 @@ function Admin() {
   const [visible, setVisible] =
     useState(10)
 
+  const [editingId, setEditingId] =
+    useState(null)
+
+  const [editedUser, setEditedUser] =
+    useState({})
+
   useEffect(() => {
 
     fetch(
@@ -76,8 +82,39 @@ function Admin() {
 
   const getCedula = (user) => {
     return (
-      user.cedula || user.ci || user.cedulaNumber || user.cedula_numero || user.cedulaNumero || user.idNumber || 'N/A'
+      user.cedula ||
+      user.ci ||
+      user.cedulaNumber ||
+      user.cedula_numero ||
+      user.cedulaNumero ||
+      user.idNumber ||
+      'N/A'
     )
+  }
+
+  const handleEdit = (user) => {
+
+    setEditingId(user.email)
+
+    setEditedUser({
+      name: user.name || '',
+      email: user.email || '',
+      role: user.role || ''
+    })
+  }
+
+  const handleSave = (email) => {
+
+    const updatedUsers = users.map((user) =>
+
+      user.email === email
+        ? { ...user, ...editedUser }
+        : user
+    )
+
+    setUsers(updatedUsers)
+
+    setEditingId(null)
   }
 
   if (loading) {
@@ -154,32 +191,118 @@ function Admin() {
 
               <article
                 className="user-card"
-                key={user.id}
+                key={user.email}
               >
 
                 <div className="user-card-body">
 
-                  <h2 className="user-name">{user.name}</h2>
+                  {editingId === user.email ? (
 
-                  <div className="user-field">
-                    <label>Cédula</label>
-                    <div className="user-value">{getCedula(user)}</div>
-                  </div>
+                    <>
 
-                  <div className="user-field">
-                    <label>Correo</label>
-                    <div className="user-value">{user.email || '—'}</div>
-                  </div>
+                      <div className="user-field">
+                        <label>Nombre</label>
 
-                  <div className="user-field">
-                    <label>Rol</label>
-                    <div className="user-value role">{user.role || '—'}</div>
-                  </div>
+                        <input
+                          type="text"
+                          value={editedUser.name}
+                          onChange={(e) =>
+                            setEditedUser({
+                              ...editedUser,
+                              name: e.target.value
+                            })
+                          }
+                        />
+                      </div>
+
+                      <div className="user-field">
+                        <label>Correo</label>
+
+                        <input
+                          type="text"
+                          value={editedUser.email}
+                          onChange={(e) =>
+                            setEditedUser({
+                              ...editedUser,
+                              email: e.target.value
+                            })
+                          }
+                        />
+                      </div>
+
+                      <div className="user-field">
+                        <label>Rol</label>
+
+                        <input
+                          type="text"
+                          value={editedUser.role}
+                          onChange={(e) =>
+                            setEditedUser({
+                              ...editedUser,
+                              role: e.target.value
+                            })
+                          }
+                        />
+                      </div>
+
+                    </>
+
+                  ) : (
+
+                    <>
+
+                      <h2 className="user-name">
+                        {user.name}
+                      </h2>
+
+                      <div className="user-field">
+                        <label>Cédula</label>
+
+                        <div className="user-value">
+                          {getCedula(user)}
+                        </div>
+                      </div>
+
+                      <div className="user-field">
+                        <label>Correo</label>
+
+                        <div className="user-value">
+                          {user.email || '—'}
+                        </div>
+                      </div>
+
+                      <div className="user-field">
+                        <label>Rol</label>
+
+                        <div className="user-value role">
+                          {user.role || '—'}
+                        </div>
+                      </div>
+
+                    </>
+
+                  )}
 
                 </div>
 
                 <div className="user-card-actions">
-                  <button className="edit-btn">Editar</button>
+
+                  <button
+                    className="edit-btn"
+                    onClick={() =>
+
+                      editingId === user.email
+                        ? handleSave(user.email)
+                        : handleEdit(user)
+                    }
+                  >
+
+                    {editingId === user.email
+                      ? 'Guardar'
+                      : 'Editar'}
+
+                  </button>
+
                 </div>
 
               </article>
