@@ -45,12 +45,13 @@ const adminRoute = createRoute({
     component: Admin,
 });
 
-/*const averiasRoute = createRoute({
+const averiasRoute = createRoute({
     getParentRoute: () => rootRoute,
     path: "/averias",
     component: Averias,
 });
-*/
+
+
 const inventarioRoute = createRoute({
     getParentRoute: () => rootRoute,
     path: "/inventario",
