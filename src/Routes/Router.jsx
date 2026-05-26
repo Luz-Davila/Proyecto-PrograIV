@@ -10,8 +10,7 @@ import Navbar from "../Components/Navbar/Navbar";
 import Footer from "../Components/Footer/Footer";
 import Admin from "../Pages/Admin/Admin";
 import Inventario from "../Pages/Inventario/Inventario";
-/*import Averias from "../Pages/Averias/Averias";*/
-
+import Averias from "../Pages/Averias/Averias";
 
 const rootRoute = createRootRoute({
     component: function RootLayout() {
@@ -45,18 +44,19 @@ const adminRoute = createRoute({
     component: Admin,
 });
 
-/*const averiasRoute = createRoute({
+const averiasRoute = createRoute({
     getParentRoute: () => rootRoute,
     path: "/averias",
     component: Averias,
 });
-*/
+
+
 const inventarioRoute = createRoute({
     getParentRoute: () => rootRoute,
     path: "/inventario",
     component: Inventario,
 });
-const routeTree = rootRoute.addChildren([homeRoute, abonadosRoute, adminRoute, /*averiasRoute,*/ inventarioRoute]);
+const routeTree = rootRoute.addChildren([homeRoute, abonadosRoute, adminRoute, averiasRoute, inventarioRoute]);
 
 export const router = createRouter({
     routeTree,
