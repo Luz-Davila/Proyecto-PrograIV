@@ -10,7 +10,7 @@ import Navbar from "../Components/Navbar/Navbar";
 import Footer from "../Components/Footer/Footer";
 import Admin from "../Pages/Admin/Admin";
 import Inventario from "../Pages/Inventario/Inventario";
-/*import Averias from "../Pages/Averias/AveriasPage";*/
+import Averias from "../Pages/Averias/Averias";
 
 
 const rootRoute = createRootRoute({
@@ -57,7 +57,7 @@ const inventarioRoute = createRoute({
     path: "/inventario",
     component: Inventario,
 });
-const routeTree = rootRoute.addChildren([homeRoute, abonadosRoute, adminRoute,/* averiasRoute,*/ inventarioRoute]);
+const routeTree = rootRoute.addChildren([homeRoute, abonadosRoute, adminRoute, averiasRoute, inventarioRoute]);
 
 export const router = createRouter({
     routeTree,
