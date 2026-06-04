@@ -8,61 +8,25 @@ import {
   flexRender,
 } from "@tanstack/react-table";
 import { useForm } from "@tanstack/react-form";
+import { useAbonados } from "../../Hooks/useAbonados";
 import "./Abonados.css";
 
-const BIN_URL = 
-"https://api.jsonbin.io/v3/b/6a05c1c6c0954111d82171f8";
-
-function getKey() {
-  return import.meta.env.VITE_JSONBIN_MASTER_KEY;
-}
-
-async function fetchAbonados() {
-  const res = await fetch(BIN_URL, {
-    headers: { "X-Master-Key": getKey() },
-  });
-
-  if (!res.ok) {
-    throw new Error(`HTTP ${res.status}`);
-  }
-
-  const data = await res.json();
-  return data.record || [];
-}
-
-async function saveAbonados(lista) {
-  const res = await fetch(BIN_URL, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-      "X-Master-Key": getKey(),
-    },
-    body: JSON.stringify(lista),
-  });
-
-  if (!res.ok) {
-    throw new Error(`HTTP ${res.status}`);
-  }
-
-}
-
 export default function Abonados() {
-    console.log("KEY:", getKey());
-console.log("LENGTH:", getKey()?.length);
-  const [abonados, setAbonados] = useState([]);
+  const {
+    data: abonados,
+    setData: setAbonados,
+    loading,
+    error,
+    save: saveAbonados,
+    reload,
+  } = useAbonados();
   const [editando, setEditando] = useState(null); 
   const [globalFilter, setGlobalFilter] = useState("");
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const [guardando, setGuardando] = useState(false);
 
-  // ── Cargar datos ──────────────────────────────────────────────────────────
   useEffect(() => {
-    fetchAbonados()
-      .then(setAbonados)
-      .catch(() => setError("No se pudieron cargar los abonados."))
-      .finally(() => setLoading(false));
-  }, []);
+    void reload();
+  }, [reload]);
 
   // ── TanStack Form ─────────────────────────────────────────────────────────
   const form = useForm({
@@ -97,8 +61,8 @@ console.log("LENGTH:", getKey()?.length);
         setAbonados(nuevaLista);
         setEditando(null);
         form.reset();
-      } catch {
-        setError("Error al guardar. Intente nuevamente.");
+      } catch (error) {
+        console.error(error);
       } finally {
         setGuardando(false);
       }
