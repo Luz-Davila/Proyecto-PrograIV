@@ -40,7 +40,7 @@ function Admin() {
 
           'X-Master-Key':
             import.meta.env
-              .VITE_JSON_MASTER_KEY,
+              .VITE_JSONBIN_MASTER_KEY,
 
           'Content-Type':
             'application/json'
@@ -119,7 +119,7 @@ function Admin() {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
-            'X-Master-Key': import.meta.env.VITE_JSON_MASTER_KEY,
+            'X-Master-Key': import.meta.env.VITE_JSONBIN_MASTER_KEY,
           },
           body: JSON.stringify(updatedUsers),
         }
