@@ -1,19 +1,18 @@
 import './Admin.css'
-import { useEffect, useState, useMemo } from 'react'
+import { useEffect, useState } from 'react'
+import axios from 'axios'
+
+const BIN_URL =
+  'https://api.jsonbin.io/v3/b/6a0cfe5aee5a733b12e919a5'
 
 function Admin() {
 
   const [users, setUsers] = useState([])
 
-  const [search, setSearch] = useState('')
+  const [filteredUsers, setFilteredUsers] =
+    useState([])
 
-  const filteredUsers = useMemo(() => {
-    return users.filter((user) =>
-      (user.name || '')
-        .toLowerCase()
-        .includes(search.toLowerCase())
-    )
-  }, [users, search])
+  const [search, setSearch] = useState('')
 
   const [loading, setLoading] =
     useState(true)
@@ -32,15 +31,15 @@ function Admin() {
 
   useEffect(() => {
 
-    fetch(
-      'https://api.jsonbin.io/v3/b/6a0cfe5aee5a733b12e919a5',
+    axios.get(
+      BIN_URL,
       {
 
         headers: {
 
           'X-Master-Key':
             import.meta.env
-              .VITE_JSONBIN_MASTER_KEY,
+              .VITE_JSON_MASTER_KEY,
 
           'Content-Type':
             'application/json'
@@ -48,21 +47,15 @@ function Admin() {
       }
     )
 
-      .then((res) => {
+      .then((response) => {
 
-        if (!res.ok) {
+        const data =
+          response.data.record ||
+          response.data
 
-          throw new Error(
-            'Error al cargar usuarios'
-          )
-        }
+        setUsers(data)
 
-        return res.json()
-      })
-
-      .then((data) => {
-
-        setUsers(data.record)
+        setFilteredUsers(data)
 
         setLoading(false)
       })
@@ -78,9 +71,21 @@ function Admin() {
 
   }, [])
 
-  
+  useEffect(() => {
+
+    const filtered = users.filter((user) =>
+
+      (user.name || '')
+        .toLowerCase()
+        .includes(search.toLowerCase())
+    )
+
+    setFilteredUsers(filtered)
+
+  }, [search, users])
 
   const getCedula = (user) => {
+
     return (
       user.cedula ||
       user.ci ||
@@ -97,8 +102,11 @@ function Admin() {
     setEditingId(user.email)
 
     setEditedUser({
+
       name: user.name || '',
+
       email: user.email || '',
+
       role: user.role || ''
     })
   }
@@ -108,32 +116,46 @@ function Admin() {
     const updatedUsers = users.map((user) =>
 
       user.email === email
-        ? { ...user, ...editedUser }
+        ? {
+            ...user,
+            ...editedUser
+          }
         : user
     )
 
     try {
-      const response = await fetch(
-        'https://api.jsonbin.io/v3/b/6a0cfe5aee5a733b12e919a5',
+
+      await axios.put(
+
+        BIN_URL,
+
+        updatedUsers,
+
         {
-          method: 'PUT',
+
           headers: {
-            'Content-Type': 'application/json',
-            'X-Master-Key': import.meta.env.VITE_JSONBIN_MASTER_KEY,
-          },
-          body: JSON.stringify(updatedUsers),
+
+            'Content-Type':
+              'application/json',
+
+            'X-Master-Key':
+              import.meta.env
+                .VITE_JSON_MASTER_KEY
+          }
         }
       )
 
-      if (!response.ok) {
-        throw new Error('Error al guardar usuarios en el JSON')
-      }
-
       setUsers(updatedUsers)
+
       setEditingId(null)
-    } catch (saveError) {
-      console.error(saveError)
-      alert('No se pudo guardar la edición. Intente de nuevo.')
+
+    } catch (error) {
+
+      console.log(error)
+
+      alert(
+        'No se pudo guardar la edición'
+      )
     }
   }
 
@@ -175,7 +197,9 @@ function Admin() {
         </h1>
 
         <p>
-          Administración de usuarios, busqueda, edición y más sobre los usuarios ingresados.
+          Administración de usuarios,
+          búsqueda, edición y más sobre
+          los usuarios ingresados.
         </p>
 
       </section>
@@ -194,7 +218,7 @@ function Admin() {
 
       </section>
 
-      {/* GRID USUARIOS */}
+      {/* GRID */}
       <section className="users-grid">
 
         {filteredUsers.length === 0 ? (
@@ -205,168 +229,195 @@ function Admin() {
 
         ) : (
 
-    filteredUsers
-    .slice(0, visible)
-    .map((user) => (
+          filteredUsers
+            .slice(0, visible)
+            .map((user) => (
 
-    <article
-    className="user-card"
-    key={user.email}
-    >
+              <article
+                className="user-card"
+                key={user.email}
+              >
 
-    <div className="user-card-body">
+                <div className="user-card-body">
 
-    {editingId === user.email ? (
+                  {editingId === user.email ? (
 
-      <>
+                    <>
 
-        <div className="user-field">
-          <label>Nombre</label>
+                      <div className="user-field">
 
-          <input
-            type="text"
-            value={editedUser.name}
-            onChange={(e) =>
-              setEditedUser({
-                ...editedUser,
-                name: e.target.value
-              })
-            }
-          />
-        </div>
+                        <label>
+                          Nombre
+                        </label>
 
-        <div className="user-field">
-          <label>Correo</label>
+                        <input
+                          type="text"
+                          value={editedUser.name}
+                          onChange={(e) =>
+                            setEditedUser({
+                              ...editedUser,
+                              name:
+                                e.target.value
+                            })
+                          }
+                        />
 
-          <input
-            type="text"
-            value={editedUser.email}
-            onChange={(e) =>
-              setEditedUser({
-                ...editedUser,
-                email: e.target.value
-              })
-            }
-          />
-        </div>
+                      </div>
 
-        <div className="user-field">
-          <label>Rol</label>
+                      <div className="user-field">
 
-          <select
-            value={editedUser.role}
-            onChange={(e) =>
-              setEditedUser({
-                ...editedUser,
-                role: e.target.value
-              })
-            }
-          >
+                        <label>
+                          Correo
+                        </label>
 
-            <option value="Administrativo">
-              Administrativo
-            </option>
+                        <input
+                          type="text"
+                          value={editedUser.email}
+                          onChange={(e) =>
+                            setEditedUser({
+                              ...editedUser,
+                              email:
+                                e.target.value
+                            })
+                          }
+                        />
 
-            <option value="Abonado">
-              Abonado
-            </option>
+                      </div>
 
-            <option value="Fontanero">
-              Fontanero
-            </option>
+                      <div className="user-field">
 
-            <option value="Junta Directiva">
-              Junta Directiva
-            </option>
+                        <label>
+                          Rol
+                        </label>
 
-          </select>
-              </div>
+                        <select
+                          value={editedUser.role}
+                          onChange={(e) =>
+                            setEditedUser({
+                              ...editedUser,
+                              role:
+                                e.target.value
+                            })
+                          }
+                        >
 
-              </>
+                          <option value="Administrativo">
+                            Administrativo
+                          </option>
 
-              ) : (
+                          <option value="Abonado">
+                            Abonado
+                          </option>
 
-          <>
+                          <option value="Fontanero">
+                            Fontanero
+                          </option>
 
-          <h2 className="user-name">
-          {user.name}
-          </h2>
+                          <option value="Junta Directiva">
+                            Junta Directiva
+                          </option>
 
-          <div className="user-field">
-          <label>Cédula</label>
+                        </select>
 
-          <div className="user-value">
-          {getCedula(user)}
-          </div>
-          </div>
+                      </div>
 
-          <div className="user-field">
-          <label>Correo</label>
+                    </>
 
-          <div className="user-value">
-          {user.email || '—'}
-          </div>
-          </div>
+                  ) : (
 
-          <div className="user-field">
-          <label>Rol</label>
+                    <>
 
-          <div className="user-value role">
-          {user.role || '—'}
-          </div>
-          </div>
+                      <h2 className="user-name">
+                        {user.name}
+                      </h2>
 
-          </>
+                      <div className="user-field">
 
-          )}
+                        <label>
+                          Cédula
+                        </label>
 
-    </div>
+                        <div className="user-value">
+                          {getCedula(user)}
+                        </div>
 
-          <div className="user-card-actions">
+                      </div>
 
-            <button
-              className="edit-btn"
-              onClick={() =>
+                      <div className="user-field">
 
-                editingId === user.email
-                  ? handleSave(user.email)
-                  : handleEdit(user)
-              }
-            >
+                        <label>
+                          Correo
+                        </label>
 
-              {editingId === user.email
-                ? 'Guardar'
-                : 'Editar'}
+                        <div className="user-value">
+                          {user.email || '—'}
+                        </div>
 
-            </button>
+                      </div>
 
-          </div>
+                      <div className="user-field">
 
-        </article>
+                        <label>
+                          Rol
+                        </label>
 
-      ))
-  )}
+                        <div className="user-value role">
+                          {user.role || '—'}
+                        </div>
 
-    </section>
+                      </div>
 
-    {/* BOTÓN VER MÁS */}
-    {visible < filteredUsers.length && (
+                    </>
 
-      <button
-        className="more-btn"
-        onClick={() =>
-          setVisible(visible + 10)
-        }
-      >
+                  )}
 
-        Ver más
+                </div>
 
-      </button>
+                <div className="user-card-actions">
 
-    )}
+                  <button
+                    className="edit-btn"
+                    onClick={() =>
 
-  </main>
-)
+                      editingId === user.email
+                        ? handleSave(user.email)
+                        : handleEdit(user)
+                    }
+                  >
+
+                    {editingId === user.email
+                      ? 'Guardar'
+                      : 'Editar'}
+
+                  </button>
+
+                </div>
+
+              </article>
+
+            ))
+        )}
+
+      </section>
+
+      {/* VER MÁS */}
+      {visible < filteredUsers.length && (
+
+        <button
+          className="more-btn"
+          onClick={() =>
+            setVisible(visible + 10)
+          }
+        >
+
+          Ver más
+
+        </button>
+
+      )}
+
+    </main>
+  )
 }
 
 export default Admin
