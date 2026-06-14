@@ -111,7 +111,7 @@ export default function Home() {
     <div className="home-wrapper">
 
       {/* Hero */}
-      <section className="hero">
+      <section id="inicio" className="hero">
         <div className="hero-overlay" />
         <div className="hero-content">
           <h1>
@@ -124,7 +124,7 @@ export default function Home() {
       </section>
 
       {/* Avisos Importantes */}
-      <section className="avisos-section">
+      <section id="avisos" className="avisos-section">
         <div className="avisos-header">
           <h2>Avisos Importantes</h2>
           <p>Mantente al tanto de las noticias más recientes sobre sostenibilidad, reciclaje y actividades de la comunidad</p>
@@ -177,7 +177,7 @@ export default function Home() {
       </section>
 
       {/* Transparencia */}
-      <section className="transparencia-section">
+      <section id="transparencia" className="transparencia-section">
         <div className="transparencia-header">
           <h2>Transparencia</h2>
           <p className="transparencia-intro">Compromiso con la gestión clara y accesible para la comunidad.</p>
@@ -195,7 +195,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="map-contact-section">
+      <section id="contacto" className="map-contact-section">
         <div className="map-contact-inner">
           <div className="map-card">
             <iframe
