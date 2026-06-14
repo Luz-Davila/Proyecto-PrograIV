@@ -4,6 +4,7 @@ import {
     createRouter,
     Outlet
 } from "@tanstack/react-router";
+import Dashboard from "../Pages/Dashboard/Dashboard";
 import Home from "../Pages/Home/Home";
 import Abonados from "../Pages/Abonados/Abonados";
 import Navbar from "../Components/Navbar/Navbar";
@@ -33,6 +34,12 @@ const homeRoute = createRoute({
     component: Home,
 });
 
+const dashboardRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/dashboard",
+  component: Dashboard,
+});
+
 const abonadosRoute = createRoute({
     getParentRoute: () => rootRoute,
     path: "/padron",
@@ -57,7 +64,14 @@ const inventarioRoute = createRoute({
     path: "/inventario",
     component: Inventario,
 });
-const routeTree = rootRoute.addChildren([homeRoute, abonadosRoute, adminRoute, averiasRoute, inventarioRoute]);
+const routeTree = rootRoute.addChildren([
+    homeRoute,
+    dashboardRoute,
+    abonadosRoute,
+    adminRoute,
+    averiasRoute,
+    inventarioRoute
+]);
 
 export const router = createRouter({
     routeTree,

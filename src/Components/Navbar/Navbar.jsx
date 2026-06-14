@@ -3,58 +3,72 @@ import { Link } from "@tanstack/react-router";
 import "./Navbar.css";
 
 const Navbar = () => {
-  const [isOpen, setIsOpen] = useState(false);
+const [isOpen, setIsOpen] = useState(false);
 
-  const toggleMenu = () => {
-    setIsOpen(!isOpen);
-  };
+const toggleMenu = () => {
+setIsOpen(!isOpen);
+};
 
-  const menuItems = [
-    { label: "HOME", path: "/" },
-    { label: "PADRÓN ABONADOS", path: "/padron" },
-    { label: "CONTROL AVERÍAS", path: "/averias" },
-    { label: "INVENTARIO BODEGA", path: "/inventario" },
-    { label: "DIRECTORIO ADMINISTRATIVO", path: "/directorio" },
-  ];
+const menuItems = [
+{ label: "INICIO", path: "#inicio" },
+{ label: "AVISOS", path: "#avisos" },
+{ label: "NOTICIAS", path: "#noticias" },
+{ label: "TRANSPARENCIA", path: "#transparencia" },
+{ label: "CONTACTO", path: "#contacto" },
+];
 
-  return (
-    <nav className="navbar">
-      <div className="navbar-container">
-        {/* Logo/Título */}
-        <Link to="/" className="navbar-logo">
-          <span className="logo-icon">💧</span>
-          SIAPB
-        </Link>
+return ( <nav className="navbar"> <div className="navbar-container">
 
-        {/* Hamburger Button */}
-        <button
-          className={`hamburger ${isOpen ? "active" : ""}`}
-          onClick={toggleMenu}
-          aria-label="Toggle menu"
-        >
-          <span></span>
-          <span></span>
-          <span></span>
-        </button>
+      {/* Logo */}
+      <Link
+        to="/"
+        className="navbar-logo"
+        onClick={() => setIsOpen(false)}
+      >
+        <span className="logo-icon">💧</span>
+        SIAPB
+      </Link>
 
-        {/* Menu Items */}
-        <ul className={`nav-menu ${isOpen ? "active" : ""}`}>
-          {menuItems.map((item) => (
-            <li key={item.path} className="nav-item">
-              <Link
-                to={item.path}
-                className="nav-link"
-                activeProps={{ className: "nav-link active" }}
-                onClick={() => setIsOpen(false)}
-              >
-                {item.label}
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </nav>
-  );
+    {/* Botón hamburguesa */}
+    <button
+      className={`hamburger ${isOpen ? "active" : ""}`}
+      onClick={toggleMenu}
+      aria-label="Toggle menu"
+    >
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+    {/* Menú Landing */}
+    <ul className={`nav-menu ${isOpen ? "active" : ""}`}>
+      {menuItems.map((item) => (
+        <li key={item.path} className="nav-item">
+          <a
+            href={item.path}
+            className="nav-link"
+            onClick={() => setIsOpen(false)}
+          >
+            {item.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+
+    {/* Acceso al sistema */}
+    <Link
+      to="/dashboard"
+      className="login-btn"
+      onClick={() => setIsOpen(false)}
+    >
+      ACCEDER AL SISTEMA
+    </Link>
+
+  </div>
+</nav>
+
+);
 };
 
 export default Navbar;
+
