@@ -1,7 +1,7 @@
 import { useState, useCallback } from "react";
 import axios from "axios";
 
-const API_URL = "https://localhost:7098/api/abonados";
+const API_URL = "https://backend-proyecto.tryasp.net/api/Abonados";
 
 export function useAbonados() {
   const [data, setData] = useState([]);
