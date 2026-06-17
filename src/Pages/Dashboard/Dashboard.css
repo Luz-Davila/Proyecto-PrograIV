@@ -173,13 +173,13 @@
 }
 
 .db-stat-value {
-    font-size: 1.7rem;
+    font-size: 2rem;
     font-weight: 700;
     line-height: 1;
 }
 
 .db-stat-label {
-    font-size: 0.82rem;
+    font-size: 0.92rem;
     color: #90a4ae;
     margin-top: 0.25rem;
 }
@@ -194,8 +194,8 @@
 }
 
 .db-section-title {
-    font-size: 0.95rem;
-    font-weight: 600;
+    font-size: 1.05rem;
+    font-weight: 700;
     color: #1a2e4a;
     margin: 0 0 1.2rem;
     padding-bottom: 0.8rem;
@@ -213,11 +213,11 @@
     display: flex;
     align-items: center;
     gap: 0.9rem;
-    padding: 0.9rem 1rem;
+    padding: 1rem 1.1rem;
     border-radius: 10px;
     text-decoration: none;
     color: #1a2e4a;
-    font-size: 0.9rem;
+    font-size: 1rem;
     font-weight: 500;
     border: 1px solid #e3eaf3;
     transition: all 0.18s;
@@ -266,4 +266,86 @@
 .db-empty p {
     margin: 0;
     font-size: 0.88rem;
+}
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .sidebar {
+    transform: translateX(-100%);
+    width: 240px !important;
+  }
+
+  .sidebar.sidebar--mobile-open {
+    transform: translateX(0);
+  }
+
+  .db-content {
+    margin-left: 0 !important;
+  }
+
+  .db-topbar {
+    padding: 0 1rem;
+  }
+
+  .db-main {
+    padding: 1rem;
+  }
+
+  .db-hero {
+    flex-direction: column;
+    padding: 1.5rem;
+    gap: 1rem;
+  }
+
+  .db-hero h1 {
+    font-size: 1.2rem;
+  }
+
+  .db-stats {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+
+  .db-stat-card {
+    padding: 1rem;
+  }
+
+  .db-quick-grid {
+    gap: 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .db-stats {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .db-hero-text {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .db-logout span {
+    display: none;
+  }
+}
+.db-menu-btn {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.3rem;
+  color: #546e7a;
+  border-radius: 6px;
+}
+
+.db-menu-btn svg {
+  width: 22px;
+  height: 22px;
+}
+
+@media (max-width: 768px) {
+  .db-menu-btn {
+    display: flex;
+    align-items: center;
+  }
 }
