@@ -1,5 +1,6 @@
 import './Admin.css'
 import { useEffect, useState } from 'react'
+import DashboardLayout from "../../Components/DashboardLayout/DashboardLayout";
 import axios from 'axios'
 
 const BIN_URL =
@@ -187,7 +188,7 @@ function Admin() {
 
   return (
 
-    <main className="admin">
+    <DashboardLayout title="Gestión Administrativa">
 
       {/* HEADER */}
       <section className="admin-header">
@@ -416,7 +417,7 @@ function Admin() {
 
       )}
 
-    </main>
+    </DashboardLayout>
   )
 }
 

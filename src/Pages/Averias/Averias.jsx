@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import DashboardLayout from "../../Components/DashboardLayout/DashboardLayout";
 import "./Averias.css";
 
 function cleanValue(value) {
@@ -172,6 +173,7 @@ export default function Averias() {
   }
 
   return (
+    <DashboardLayout title="Control de Averías">
     <div className="averias-container">
       <div className="averias-header">
         <h1>Módulo de Reporte de Averías</h1>
@@ -267,5 +269,6 @@ export default function Averias() {
         )}
       </div>
     </div>
+</DashboardLayout>
   );
 }
