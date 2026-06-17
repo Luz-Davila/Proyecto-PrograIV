@@ -1,6 +1,7 @@
 import './Admin.css'
 import { useEffect, useState } from 'react'
 import DashboardLayout from "../../Components/DashboardLayout/DashboardLayout";
+import ReportesAverias from "../../Components/ReportesAverias/ReportesAverias";
 import axios from 'axios'
 
 const BIN_URL =
@@ -416,6 +417,11 @@ function Admin() {
         </button>
 
       )}
+
+      {/* SECCIÓN DE REPORTES DE AVERÍAS */}
+      <section className="reportes-section">
+        <ReportesAverias />
+      </section>
 
     </DashboardLayout>
   )
