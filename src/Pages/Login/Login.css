@@ -1,0 +1,144 @@
+.login-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #0d47a1 0%, #1976d2 60%, #42a5f5 100%);
+    padding: 1rem;
+}
+
+.login-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 2.5rem 2rem;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Logo */
+.login-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.login-logo svg {
+    width: 36px;
+    height: 36px;
+}
+
+.login-logo span {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: #0d47a1;
+    letter-spacing: 1px;
+}
+
+/* Títulos */
+.login-title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #1a1a2e;
+    margin: 0;
+}
+
+.login-subtitle {
+    font-size: 0.88rem;
+    color: #78909c;
+    margin: 0 0 1rem;
+    text-align: center;
+}
+
+/* Formulario */
+.login-form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.login-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.login-field label {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #455a64;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.login-field input {
+    padding: 0.7rem 1rem;
+    border: 1.5px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    color: #1a1a2e;
+    background: #f9fafb;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
+}
+
+.login-field input:focus {
+    border-color: #1565c0;
+    box-shadow: 0 0 0 3px rgba(21, 101, 192, 0.12);
+    background: #fff;
+}
+
+/* Error */
+.login-error {
+    font-size: 0.85rem;
+    color: #c62828;
+    background: #ffebee;
+    border-radius: 8px;
+    padding: 0.6rem 0.9rem;
+    margin: 0;
+    text-align: center;
+}
+
+/* Botón submit */
+.login-submit {
+    width: 100%;
+    padding: 0.8rem;
+    background: #1565c0;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+    margin-top: 0.25rem;
+}
+
+.login-submit:hover:not(:disabled) {
+    background: #0d47a1;
+    transform: translateY(-1px);
+}
+
+.login-submit:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+}
+
+/* Volver */
+.login-back {
+    margin-top: 0.75rem;
+    font-size: 0.85rem;
+    color: #78909c;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.login-back:hover {
+    color: #1565c0;
+}
