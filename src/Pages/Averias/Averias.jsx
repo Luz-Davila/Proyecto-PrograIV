@@ -1,124 +1,49 @@
 import { useEffect, useState } from "react";
 import "./Averias.css";
 
-function cleanValue(value) {
-  return value
-    ?.toString()
-    .trim()
-    .replace(/^["'\s]+|["'\s]+$/g, "")
-    .replace(/\\\$/g, "$")
-    .replace(/\\(["'])/g, "$1")
-    .replace(/\\\\/g, "\\");
-}
-
-function getKey() {
-  const candidates = [
-    import.meta.env.VITE_JSONBIN_MASTER_KEY,
-    import.meta.env.VITE_JSON_MASTER_KEY,
-    import.meta.env.VITE_JSONBIN_KEY,
-    import.meta.env.VITE_API_KEY,
-  ];
-
-  console.log("Variables ENV disponibles:", candidates);
-
-  const raw = candidates.find((v) => v && v.trim() !== "");
-  if (!raw) throw new Error("Falta la clave de JSONBin");
-
-  const key = cleanValue(raw);
-  console.log("KEY LIMPIA:", key);
-  return key;
-}
-
-function getBinCandidates() {
-  const candidates = [];
-
-  const rawId = cleanValue(import.meta.env.VITE_BIN_ID);
-  if (rawId) {
-    candidates.push(`https://api.jsonbin.io/v3/b/${rawId}`);
-  }
-
-  const rawUrl = cleanValue(import.meta.env.VITE_JSONBIN_URL);
-  if (rawUrl) {
-    const base = rawUrl.replace(/\/+$/, "");
-    if (!candidates.some((c) => c.includes(base))) {
-      candidates.push(base);
-    }
-  }
-
-  if (candidates.length === 0) {
-    throw new Error("Falta la URL o el ID de JSONBin");
-  }
-
-  return candidates;
-}
-
-function getFetchUrls() {
-  return getBinCandidates().flatMap((base) =>
-    base.endsWith("/latest") ? [base] : [base, `${base}/latest`]
-  );
-}
-
-function getSaveUrls() {
-  return getBinCandidates();
-}
-
+// IMPORTANTE: Asegúrate de que este puerto (7098) coincida con el de tu IIS Express o Kestrel en Visual Studio.
+const API_URL = "https://localhost:7098/api/averias";
 async function fetchAverias() {
-  const key = getKey();
-  const urls = getFetchUrls();
-  let lastError = null;
-
-  for (const url of urls) {
-    try {
-      const res = await fetch(url, {
-        headers: { "X-Master-Key": key },
-      });
-
-      if (!res.ok) {
-        lastError = new Error(`HTTP ${res.status} en ${url}`);
-        continue;
-      }
-
-      const data = await res.json();
-      const record = data.record ?? data;
-
-      if (Array.isArray(record)) return record;
-      if (record?.averias && Array.isArray(record.averias)) return record.averias;
-      return [];
-    } catch (error) {
-      lastError = error;
-    }
+  try {
+    const res = await fetch( API_URL,{
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status} en el Backend`);
+    return await res.json();
+  } catch (error) {
+    console.error(error);
+    throw new Error("No se pudo conectar con el servidor backend.", {
+      cause: error,
+    });
   }
-
-  throw lastError || new Error("No se pudo obtener datos de JSONBin");
 }
 
-async function saveAverias(lista) {
-  const key = getKey();
-  let lastError = null;
-
-  for (const url of getSaveUrls()) {
-    try {
-      const res = await fetch(url, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          "X-Master-Key": key,
-        },
-        body: JSON.stringify(lista),
-      });
-
-      if (!res.ok) {
-        lastError = new Error(`HTTP ${res.status} en ${url}`);
-        continue;
-      }
-
-      return;
-    } catch (error) {
-      lastError = error;
-    }
+async function saveAverias(nuevaAveria) {
+  try {
+    const res = await fetch(API_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify({
+        nombre: nuevaAveria.nombre,
+        tipoAveria: nuevaAveria.tipoAveria,
+        descripcion: nuevaAveria.descripcion,
+        estado: nuevaAveria.estado,
+      }),
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status} al guardar en Backend`);
+    return await res.json();
+  } catch (error) {
+    console.error(error);
+    throw new Error("No se pudo guardar la avería en el servidor backend.", {
+      cause: error,
+    });
   }
-
-  throw lastError || new Error("No se pudo guardar en JSONBin");
 }
 
 export default function Averias() {
@@ -132,11 +57,14 @@ export default function Averias() {
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
+ 
     fetchAverias()
       .then(setAverias)
       .catch((error) => {
         console.error(error);
-        setError("No se pudieron cargar las averías. Verifica la clave JSONBin y la conexión.");
+        setError(
+          "No se pudieron cargar las averías. Verifica que el backend esté corriendo.",
+        );
       })
       .finally(() => setLoading(false));
   }, []);
@@ -146,26 +74,26 @@ export default function Averias() {
     setSaving(true);
     setError("");
 
-    const nuevaAveria = {
-      id: averias.length > 0 ? Math.max(...averias.map((a) => a.id)) + 1 : 1,
+    const averiaParaGuardar = {
       nombre,
       tipoAveria,
       descripcion,
       estado,
     };
 
-    const nuevaLista = [...averias, nuevaAveria];
-
     try {
-      await saveAverias(nuevaLista);
-      setAverias(nuevaLista);
+      // El backend almacena en Supabase y nos retorna el registro con su ID real autoincremental
+      const averiaGuardada = await saveAverias(averiaParaGuardar);
+      setAverias([...averias, averiaGuardada]);
+
+      // Limpieza de campos del formulario
       setNombre("");
       setTipoAveria("");
       setDescripcion("");
       setEstado("Pendiente");
     } catch (error) {
       console.error(error);
-      setError("No se pudo guardar la avería. Revisa la clave JSONBin o la conexión.");
+      setError(error.message || "Error al guardar en el backend.");
     } finally {
       setSaving(false);
     }
@@ -180,7 +108,11 @@ export default function Averias() {
       <div className="form-card">
         <h2>Formulario de Averías</h2>
 
-        {error && <div className="loading" style={{ color: "#c00" }}>{error}</div>}
+        {error && (
+          <div className="loading" style={{ color: "#c00" }}>
+            {error}
+          </div>
+        )}
 
         <form onSubmit={handleSubmit}>
           <div className="form-group">
