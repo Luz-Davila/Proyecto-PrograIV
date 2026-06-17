@@ -61,8 +61,8 @@ export default function Navbar() {
           ))}
         </ul>
 
-        {/* CTA */}
-        <Link to="/dashboard" className="login-btn" onClick={() => setIsOpen(false)}>
+        {/* CTA — ahora apunta a /login */}
+        <Link to="/login" className="login-btn" onClick={() => setIsOpen(false)}>
           Acceder al sistema
         </Link>
 

@@ -2,7 +2,8 @@ import {
     createRootRoute,
     createRoute,
     createRouter,
-    Outlet
+    Outlet,
+    redirect,
 } from "@tanstack/react-router";
 import Dashboard from "../Pages/Dashboard/Dashboard";
 import Home from "../Pages/Home/Home";
@@ -12,14 +13,21 @@ import Footer from "../Components/Footer/Footer";
 import Admin from "../Pages/Admin/Admin";
 import Inventario from "../Pages/Inventario/Inventario";
 import Averias from "../Pages/Averias/Averias";
+import Login from "../Pages/Login/Login";
 
-// Layout público (con Navbar y Footer) — para el landing
+// Helper: ¿hay token guardado?
+function isAuthenticated() {
+    return !!localStorage.getItem("token");
+}
+
+// Layout raíz
 const rootRoute = createRootRoute({
     component: function RootLayout() {
         return <Outlet />;
     },
 });
 
+// Layout público (con Navbar y Footer)
 const publicLayout = createRoute({
     getParentRoute: () => rootRoute,
     id: "public",
@@ -40,17 +48,37 @@ const publicLayout = createRoute({
 const dashboardLayout = createRoute({
     getParentRoute: () => rootRoute,
     id: "dashboard-layout",
+    // Protección: si no hay token, redirige al login
+    beforeLoad: () => {
+        if (!isAuthenticated()) {
+            throw redirect({ to: "/login" });
+        }
+    },
     component: function DashboardLayout() {
         return <Outlet />;
     },
 });
 
+// Rutas públicas
 const homeRoute = createRoute({
     getParentRoute: () => publicLayout,
     path: "/",
     component: Home,
 });
 
+const loginRoute = createRoute({
+    getParentRoute: () => rootRoute,
+    path: "/login",
+    // Si ya está logueado, lo manda directo al dashboard
+    beforeLoad: () => {
+        if (isAuthenticated()) {
+            throw redirect({ to: "/dashboard" });
+        }
+    },
+    component: Login,
+});
+
+// Rutas protegidas
 const dashboardRoute = createRoute({
     getParentRoute: () => dashboardLayout,
     path: "/dashboard",
@@ -83,6 +111,7 @@ const inventarioRoute = createRoute({
 
 const routeTree = rootRoute.addChildren([
     publicLayout.addChildren([homeRoute]),
+    loginRoute,
     dashboardLayout.addChildren([
         dashboardRoute,
         abonadosRoute,
