@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import DashboardLayout from "../../Components/DashboardLayout/DashboardLayout";
 import {
   useReactTable,
   getCoreRowModel,
@@ -12,14 +13,13 @@ import { useAbonados } from "../../Hooks/useAbonados";
 import "./Abonados.css";
 
 export default function Abonados() {
-  const {
-    data: abonados,
-    setData: setAbonados,
-    loading,
-    error,
-    save: saveAbonados,
-    reload,
-  } = useAbonados();
+ const {
+  data: abonados,
+  loading,
+  error,
+  save: saveAbonados,
+  reload,
+} = useAbonados();
   const [editando, setEditando] = useState(null); 
   const [globalFilter, setGlobalFilter] = useState("");
   const [guardando, setGuardando] = useState(false);
@@ -38,35 +38,23 @@ export default function Abonados() {
       telefono: "",
       estado: "Activo",
     },
-    onSubmit: async ({ value }) => {
-      setGuardando(true);
-      try {
-        let nuevaLista;
-
-        if (editando !== null) {
-          // Actualizar
-          nuevaLista = abonados.map((a) =>
-            a.id === editando ? { ...a, ...value } : a
-          );
-        } else {
-          // Crear
-          const nuevoId =
-            abonados.length > 0
-              ? Math.max(...abonados.map((a) => a.id)) + 1
-              : 1;
-          nuevaLista = [...abonados, { id: nuevoId, ...value }];
-        }
-
-        await saveAbonados(nuevaLista);
-        setAbonados(nuevaLista);
-        setEditando(null);
-        form.reset();
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setGuardando(false);
-      }
-    },
+ onSubmit: async ({ value }) => {
+  setGuardando(true);
+  try {
+    if (editando !== null) {
+      await saveAbonados(value, editando);
+    } else {
+      await saveAbonados(value);
+    }
+    setEditando(null);
+    form.reset();
+    await reload();
+  } catch (err) {
+    console.error(err);
+  } finally {
+    setGuardando(false);
+  }
+},
   });
 
   // Cargar datos del abonado al editar
@@ -154,10 +142,11 @@ export default function Abonados() {
 
   // ── Render ────────────────────────────────────────────────────────────────
   return (
-    <div className="abonados-wrapper">
-      {/* Header */}
-      <div className="abonados-header">
-        <h1>Módulo de Abonados</h1>
+    <DashboardLayout title="Módulo de Abonados">
+      <div className="abonados-wrapper">
+        {/* Header */}
+        <div className="abonados-header">
+          <h1>Módulo de Abonados</h1>
       </div>
 
       {/* Formulario */}
@@ -382,5 +371,6 @@ export default function Abonados() {
         </div>
       )}
     </div>
+ </DashboardLayout>
   );
 }

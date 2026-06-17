@@ -1,15 +1,32 @@
-import { useJsonBinCollection } from "./useJsonBinCollection";
+import { useState, useCallback } from "react";
+import axios from "axios";
 
-const ABONADOS_URL = "https://api.jsonbin.io/v3/b/6a05c1c6c0954111d82171f8";
-const ABONADOS_URLS = [ABONADOS_URL];
-const ABONADOS_KEY_ENVS = ["VITE_JSONBIN_MASTER_KEY"];
+const API_URL = "https://backend-proyecto.tryasp.net/api/Abonados";
 
 export function useAbonados() {
-  return useJsonBinCollection({
-    keyEnvNames: ABONADOS_KEY_ENVS,
-    fixedUrls: ABONADOS_URLS,
-    selectItems: (payload) => payload?.record || [],
-    loadErrorMessage: "No se pudieron cargar los abonados.",
-    saveErrorMessage: "No se pudieron guardar los abonados.",
-  });
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  const reload = useCallback(async () => {
+    setLoading(true);
+    try {
+      const res = await axios.get(API_URL);
+      setData(res.data);
+    } catch {
+      setError("No se pudieron cargar los abonados.");
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  const save = useCallback(async (abonado, id = null) => {
+    if (id) {
+      await axios.put(`${API_URL}/${id}`, abonado);
+    } else {
+      await axios.post(API_URL, abonado);
+    }
+  }, []);
+
+  return { data, setData, loading, error, save, reload };
 }

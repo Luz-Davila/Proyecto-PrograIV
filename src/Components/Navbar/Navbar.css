@@ -1,216 +1,156 @@
-/* ── Navbar General ── */
 .navbar {
-  background: linear-gradient(135deg, rgba(13, 71, 161, 0.95) 0%, rgba(2, 136, 209, 0.9) 100%);
-  box-shadow: 0 8px 32px rgba(13, 71, 161, 0.15);
-  position: sticky;
+  position: fixed;
   top: 0;
-  z-index: 1000;
+  left: 0;
   width: 100%;
+  z-index: 1000;
+  background: linear-gradient(135deg, rgba(13,71,161,0.97) 0%, rgba(2,136,209,0.95) 100%);
+  backdrop-filter: blur(12px);
+  transition: transform 0.35s ease, box-shadow 0.3s ease, background 0.3s ease;
+}
+
+.navbar--hidden {
+  transform: translateY(-100%);
+}
+
+.navbar--scrolled {
+  box-shadow: 0 4px 24px rgba(13,71,161,0.18);
+  background: linear-gradient(135deg, rgba(13,71,161,1) 0%, rgba(2,136,209,0.98) 100%);
 }
 
 .navbar-container {
   max-width: 1400px;
   margin: 0 auto;
   padding: 0 4vw;
+  height: 68px;
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  height: 70px;
+  justify-content: space-between;
+  gap: 1rem;
 }
 
-/* ── Logo ── */
+/* Logo */
 .navbar-logo {
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 1.4rem;
+  gap: 10px;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.logo-svg {
+  width: 32px;
+  height: 32px;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+}
+
+.logo-text {
+  font-size: 1.25rem;
   font-weight: 800;
   color: #fff;
-  text-decoration: none;
-  transition: all 0.3s ease;
-  letter-spacing: 1px;
+  letter-spacing: 1.5px;
 }
 
-.navbar-logo:hover {
-  transform: scale(1.05);
-  color: #e3f2fd;
-}
-
-.logo-icon {
-  font-size: 1.8rem;
-}
-
-/* ── Menu Items ── */
+/* Menú */
 .nav-menu {
   display: flex;
   list-style: none;
-  gap: 2px;
   margin: 0;
   padding: 0;
+  gap: 2px;
   align-items: center;
-}
-
-.nav-item {
-  position: relative;
 }
 
 .nav-link {
   display: inline-block;
-  padding: 8px 16px;
-  color: rgba(255, 255, 255, 0.88);
+  padding: 7px 14px;
+  color: rgba(255,255,255,0.85);
   text-decoration: none;
-  font-size: 0.8rem;
-  font-weight: 600;
-  letter-spacing: 0.5px;
-  transition: all 0.3s ease;
-  border-radius: 4px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border-radius: 6px;
+  transition: all 0.2s ease;
   white-space: nowrap;
 }
 
 .nav-link:hover {
   color: #fff;
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(10px);
+  background: rgba(255,255,255,0.15);
 }
 
-.nav-link.active {
-  color: #fff;
-  background: rgba(255, 255, 255, 0.25);
-  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.1);
+/* CTA */
+.login-btn {
+  flex-shrink: 0;
+  background: #fff;
+  color: #0d47a1;
+  padding: 9px 20px;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  white-space: nowrap;
 }
 
-/* ── Hamburger Menu ── */
+.login-btn:hover {
+  background: #e3f2fd;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+}
+
+/* Hamburguesa */
 .hamburger {
   display: none;
   flex-direction: column;
+  gap: 5px;
   background: transparent;
   border: none;
   cursor: pointer;
-  gap: 5px;
-  width: 28px;
-  padding: 0;
+  padding: 4px;
 }
 
 .hamburger span {
-  width: 25px;
-  height: 3px;
+  display: block;
+  width: 24px;
+  height: 2.5px;
   background: #fff;
   border-radius: 2px;
   transition: all 0.3s ease;
 }
 
-.hamburger.active span:nth-child(1) {
-  transform: rotate(45deg) translate(10px, 10px);
-}
+.hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+.hamburger.active span:nth-child(2) { opacity: 0; }
+.hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
 
-.hamburger.active span:nth-child(2) {
-  opacity: 0;
-}
-
-.hamburger.active span:nth-child(3) {
-  transform: rotate(-45deg) translate(7px, -7px);
-}
-
-/* ── Responsive Design ── */
-@media (max-width: 1024px) {
-  .nav-link {
-    padding: 8px 12px;
-    font-size: 0.75rem;
-  }
-}
-
-@media (max-width: 768px) {
-  .hamburger {
-    display: flex;
-  }
-
-  .navbar-container {
-    height: 60px;
-    padding: 0 3vw;
-  }
-
-  .navbar-logo {
-    font-size: 1.1rem;
-  }
-
-  .logo-icon {
-    font-size: 1.4rem;
-  }
+/* Responsive */
+@media (max-width: 900px) {
+  .hamburger { display: flex; }
 
   .nav-menu {
     position: absolute;
-    top: 60px;
+    top: 68px;
     left: 0;
     width: 100%;
     flex-direction: column;
-    background: linear-gradient(180deg, rgba(13, 71, 161, 0.98) 0%, rgba(2, 136, 209, 0.95) 100%);
-    gap: 0;
+    background: rgba(13,71,161,0.98);
     padding: 0;
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.3s ease;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
-    backdrop-filter: blur(10px);
+    gap: 0;
   }
 
-  .nav-menu.active {
-    max-height: 500px;
-  }
+  .nav-menu.active { max-height: 420px; }
 
-  .nav-item {
-    width: 100%;
-    text-align: center;
-  }
+  .nav-menu li { width: 100%; }
 
   .nav-link {
     display: block;
-    width: 100%;
-    padding: 14px 16px;
+    padding: 14px 24px;
+    font-size: 0.95rem;
     border-radius: 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    font-size: 0.9rem;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
   }
 
-  .nav-link:hover {
-    background: rgba(255, 255, 255, 0.2);
-  }
-
-  .nav-link.active {
-    background: rgba(255, 255, 255, 0.25);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  }
-}
-
-@media (max-width: 480px) {
-  .navbar-container {
-    height: 55px;
-  }
-
-  .navbar-logo {
-    font-size: 1rem;
-    gap: 6px;
-  }
-
-  .logo-icon {
-    font-size: 1.2rem;
-  }
-
-  .nav-link {
-    padding: 12px 14px;
-    font-size: 0.85rem;
-  }
-}
-.login-btn {
-  background: white;
-  color: #0d47a1;
-  padding: 10px 18px;
-  border-radius: 8px;
-  font-weight: 700;
-  text-decoration: none;
-  transition: .3s;
-}
-
-.login-btn:hover {
-  background: #f1f5f9;
-  transform: translateY(-2px);
+  .login-btn { display: none; }
 }

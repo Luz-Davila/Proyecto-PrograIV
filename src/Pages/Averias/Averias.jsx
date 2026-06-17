@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import DashboardLayout from "../../Components/DashboardLayout/DashboardLayout";
 import "./Averias.css";
 
 // IMPORTANTE: Asegúrate de que este puerto (7098) coincida con el de tu IIS Express o Kestrel en Visual Studio.
@@ -100,6 +101,7 @@ export default function Averias() {
   }
 
   return (
+    <DashboardLayout title="Control de Averías">
     <div className="averias-container">
       <div className="averias-header">
         <h1>Módulo de Reporte de Averías</h1>
@@ -199,5 +201,6 @@ export default function Averias() {
         )}
       </div>
     </div>
+</DashboardLayout>
   );
 }
