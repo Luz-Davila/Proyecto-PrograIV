@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "./Home.css";
+import FormularioAverias from "../../Components/FormularioAverias/FormularioAverias";
 
 const slides = [
   {
@@ -101,18 +102,13 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Averías — espacio para tu compañero */}
+      {/* Averías — Formulario */}
       <section id="averias" className="section averias-section">
         <div className="section-header section-header--light">
           <h2>Control de Averías</h2>
-          <p>Reportá y seguí el estado de las averías en tu sector</p>
+          <p>Reportá las averías que encuentres en tu vivienda</p>
         </div>
-        <div className="averias-placeholder">
-          <svg viewBox="0 0 24 24" fill="none" stroke="#0288d1" strokeWidth="1.5">
-            <path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
-          <p>Módulo de averías — próximamente disponible</p>
-        </div>
+        <FormularioAverias />
       </section>
 
       {/* Transparencia */}

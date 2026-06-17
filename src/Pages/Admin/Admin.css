@@ -233,3 +233,12 @@
 
   background: white;
 }
+
+/* Estilos para la sección de reportes de averías */
+.reportes-section {
+  margin-top: 3rem;
+  padding: 2rem;
+  background: white;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+}
