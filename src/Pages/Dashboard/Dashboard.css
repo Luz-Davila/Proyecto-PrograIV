@@ -1,114 +1,269 @@
-.dashboard {
-  margin-left: 260px;
-  max-width: 1400px;
-  margin: auto;
-  padding: 2rem;
-  min-height: 80vh;
+.db-layout {
+    display: flex;
+    min-height: 100vh;
+    background: #f0f4f8;
 }
 
-.dashboard-hero {
-  background: linear-gradient(
-    135deg,
-    #0d47a1,
-    #0288d1
-  );
-  color: white;
-  padding: 2rem;
-  border-radius: 20px;
-  margin-bottom: 2rem;
-  box-shadow: 0 15px 30px rgba(0,0,0,.15);
+.db-content {
+    margin-left: 240px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    transition: margin-left 0.25s ease;
 }
 
-.dashboard-hero h1 {
-  margin: 0;
-  color: white;
+.db-content--expanded {
+    margin-left: 68px;
 }
 
-.dashboard-hero p {
-  margin-top: .8rem;
-  opacity: .9;
+/* Top bar */
+.db-topbar {
+    height: 64px;
+    background: #fff;
+    border-bottom: 1px solid #e3eaf3;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 2rem;
+    position: sticky;
+    top: 0;
+    z-index: 50;
 }
 
-.dashboard-date {
-  display: inline-block;
-  margin-top: 1rem;
-  padding: .5rem 1rem;
-  background: rgba(255,255,255,.2);
-  border-radius: 30px;
+.db-page-title {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #1a2e4a;
+    margin: 0;
 }
 
-.stats-grid {
-  display: grid;
-  grid-template-columns:
-    repeat(auto-fit, minmax(220px,1fr));
-  gap: 1.5rem;
-  margin-bottom: 2rem;
+.db-logout {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    background: none;
+    border: 1.5px solid #e3eaf3;
+    border-radius: 8px;
+    padding: 0.45rem 1rem;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #546e7a;
+    cursor: pointer;
+    transition: all 0.18s;
 }
 
-.stat-card {
-  background: white;
-  border-radius: 18px;
-  padding: 1.5rem;
-  text-align: center;
-  box-shadow:
-    0 8px 20px rgba(0,0,0,.08);
-  transition: .3s;
+.db-logout:hover {
+    border-color: #c62828;
+    color: #c62828;
+    background: #ffebee;
 }
 
-.stat-card:hover {
-  transform: translateY(-5px);
+.db-logout svg {
+    width: 17px;
+    height: 17px;
 }
 
-.icon {
-  font-size: 2.5rem;
+/* Main */
+.db-main {
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
 }
 
-.stat-card h2 {
-  margin: .8rem 0;
-  color: #0d47a1;
+/* Hero */
+.db-hero {
+    background: linear-gradient(135deg, #0d47a1 0%, #0288d1 100%);
+    border-radius: 16px;
+    padding: 2rem 2.5rem;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
 }
 
-.quick-actions,
-.activity-panel {
-  background: white;
-  padding: 1.5rem;
-  border-radius: 18px;
-  margin-bottom: 2rem;
-  box-shadow:
-    0 8px 20px rgba(0,0,0,.08);
+.db-hero-text {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
 }
 
-.actions-grid {
-  display: grid;
-  grid-template-columns:
-    repeat(auto-fit, minmax(250px,1fr));
-  gap: 1rem;
-  margin-top: 1rem;
+.db-hero-icon {
+    width: 52px;
+    height: 52px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
 }
 
-.action-card {
-  text-decoration: none;
-  color: white;
-  background: linear-gradient(
-    135deg,
-    #0d47a1,
-    #0288d1
-  );
-  padding: 1.2rem;
-  border-radius: 15px;
-  text-align: center;
-  font-weight: 600;
-  transition: .3s;
+.db-hero-icon svg {
+    width: 28px;
+    height: 28px;
 }
 
-.action-card:hover {
-  transform: scale(1.03);
+.db-hero h1 {
+    margin: 0 0 0.3rem;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: white;
 }
 
-.activity-panel ul {
-  margin-top: 1rem;
+.db-hero p {
+    margin: 0;
+    opacity: 0.85;
+    font-size: 0.88rem;
 }
 
-.activity-panel li {
-  margin-bottom: .8rem;
+.db-hero-date {
+    background: rgba(255,255,255,0.18);
+    padding: 0.5rem 1.1rem;
+    border-radius: 30px;
+    font-size: 0.82rem;
+    white-space: nowrap;
+    text-transform: capitalize;
+}
+
+/* Stats */
+.db-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.25rem;
+}
+
+.db-stat-card {
+    background: white;
+    border-radius: 14px;
+    padding: 1.4rem 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    box-shadow: 0 2px 10px rgba(13,71,161,0.06);
+    border: 1px solid #f0f4f8;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.db-stat-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(13,71,161,0.1);
+}
+
+.db-stat-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.db-stat-icon svg {
+    width: 24px;
+    height: 24px;
+}
+
+.db-stat-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.db-stat-value {
+    font-size: 1.7rem;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.db-stat-label {
+    font-size: 0.82rem;
+    color: #90a4ae;
+    margin-top: 0.25rem;
+}
+
+/* Sections */
+.db-section {
+    background: white;
+    border-radius: 14px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 10px rgba(13,71,161,0.06);
+    border: 1px solid #f0f4f8;
+}
+
+.db-section-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #1a2e4a;
+    margin: 0 0 1.2rem;
+    padding-bottom: 0.8rem;
+    border-bottom: 1px solid #f0f4f8;
+}
+
+/* Quick links */
+.db-quick-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.db-quick-card {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    padding: 0.9rem 1rem;
+    border-radius: 10px;
+    text-decoration: none;
+    color: #1a2e4a;
+    font-size: 0.9rem;
+    font-weight: 500;
+    border: 1px solid #e3eaf3;
+    transition: all 0.18s;
+}
+
+.db-quick-card:hover {
+    background: #e3f2fd;
+    border-color: #0288d1;
+    color: #0d47a1;
+}
+
+.db-quick-icon {
+    width: 20px;
+    height: 20px;
+    color: #0288d1;
+    flex-shrink: 0;
+}
+
+.db-arrow {
+    width: 16px;
+    height: 16px;
+    margin-left: auto;
+    color: #b0bec5;
+    flex-shrink: 0;
+}
+
+.db-quick-card:hover .db-arrow {
+    color: #0288d1;
+}
+
+/* Empty state */
+.db-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem;
+    color: #b0bec5;
+    gap: 0.8rem;
+}
+
+.db-empty svg {
+    width: 40px;
+    height: 40px;
+}
+
+.db-empty p {
+    margin: 0;
+    font-size: 0.88rem;
 }

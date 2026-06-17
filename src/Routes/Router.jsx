@@ -13,9 +13,17 @@ import Admin from "../Pages/Admin/Admin";
 import Inventario from "../Pages/Inventario/Inventario";
 import Averias from "../Pages/Averias/Averias";
 
-
+// Layout público (con Navbar y Footer) — para el landing
 const rootRoute = createRootRoute({
     component: function RootLayout() {
+        return <Outlet />;
+    },
+});
+
+const publicLayout = createRoute({
+    getParentRoute: () => rootRoute,
+    id: "public",
+    component: function PublicLayout() {
         return (
             <>
                 <Navbar />
@@ -28,51 +36,60 @@ const rootRoute = createRootRoute({
     },
 });
 
-const homeRoute = createRoute({
+// Layout del dashboard (sin Navbar, sin Footer)
+const dashboardLayout = createRoute({
     getParentRoute: () => rootRoute,
+    id: "dashboard-layout",
+    component: function DashboardLayout() {
+        return <Outlet />;
+    },
+});
+
+const homeRoute = createRoute({
+    getParentRoute: () => publicLayout,
     path: "/",
     component: Home,
 });
 
 const dashboardRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  path: "/dashboard",
-  component: Dashboard,
+    getParentRoute: () => dashboardLayout,
+    path: "/dashboard",
+    component: Dashboard,
 });
 
 const abonadosRoute = createRoute({
-    getParentRoute: () => rootRoute,
+    getParentRoute: () => dashboardLayout,
     path: "/padron",
     component: Abonados,
 });
 
 const adminRoute = createRoute({
-    getParentRoute: () => rootRoute,
+    getParentRoute: () => dashboardLayout,
     path: "/directorio",
     component: Admin,
 });
 
 const averiasRoute = createRoute({
-    getParentRoute: () => rootRoute,
+    getParentRoute: () => dashboardLayout,
     path: "/averias",
     component: Averias,
 });
 
-
 const inventarioRoute = createRoute({
-    getParentRoute: () => rootRoute,
+    getParentRoute: () => dashboardLayout,
     path: "/inventario",
     component: Inventario,
 });
+
 const routeTree = rootRoute.addChildren([
-    homeRoute,
-    dashboardRoute,
-    abonadosRoute,
-    adminRoute,
-    averiasRoute,
-    inventarioRoute
+    publicLayout.addChildren([homeRoute]),
+    dashboardLayout.addChildren([
+        dashboardRoute,
+        abonadosRoute,
+        adminRoute,
+        averiasRoute,
+        inventarioRoute,
+    ]),
 ]);
 
-export const router = createRouter({
-    routeTree,
-});
+export const router = createRouter({ routeTree });
