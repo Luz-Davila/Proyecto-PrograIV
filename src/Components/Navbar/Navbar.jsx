@@ -1,60 +1,72 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link } from "@tanstack/react-router";
 import "./Navbar.css";
 
-const Navbar = () => {
-  const [isOpen, setIsOpen] = useState(false);
+const menuItems = [
+  { label: "Inicio",        href: "#inicio" },
+  { label: "Avisos",        href: "#avisos" },
+  { label: "Noticias",      href: "#noticias" },
+  { label: "Averías",       href: "#averias" },
+  { label: "Transparencia", href: "#transparencia" },
+  { label: "Contacto",      href: "#contacto" },
+];
 
-  const toggleMenu = () => {
-    setIsOpen(!isOpen);
-  };
+export default function Navbar() {
+  const [isOpen, setIsOpen]       = useState(false);
+  const [visible, setVisible]     = useState(true);
+  const [scrolled, setScrolled]   = useState(false);
+  const lastScrollY               = useRef(0);
 
-  const menuItems = [
-    { label: "HOME", path: "/" },
-    { label: "PADRÓN ABONADOS", path: "/padron" },
-    { label: "CONTROL AVERÍAS", path: "/averias" },
-    { label: "INVENTARIO BODEGA", path: "/inventario" },
-    { label: "DIRECTORIO ADMINISTRATIVO", path: "/directorio" },
-  ];
+  useEffect(() => {
+    function onScroll() {
+      const y = window.scrollY;
+      setScrolled(y > 20);
+      setVisible(y < lastScrollY.current || y < 60);
+      lastScrollY.current = y;
+    }
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   return (
-    <nav className="navbar">
+    <nav className={`navbar ${scrolled ? "navbar--scrolled" : ""} ${visible ? "" : "navbar--hidden"}`}>
       <div className="navbar-container">
-        {/* Logo/Título */}
-        <Link to="/" className="navbar-logo">
-          <span className="logo-icon">💧</span>
-          SIAPB
+
+        {/* Logo */}
+        <Link to="/" className="navbar-logo" onClick={() => setIsOpen(false)}>
+          <svg viewBox="0 0 32 32" className="logo-svg" xmlns="http://www.w3.org/2000/svg">
+            <path d="M16 3 C16 3 6 14 6 20 a10 10 0 0 0 20 0 C26 14 16 3 16 3Z" fill="white" opacity="0.95"/>
+            <path d="M16 10 C16 10 10 17 10 21 a6 6 0 0 0 12 0 C22 17 16 10 16 10Z" fill="rgba(13,71,161,0.35)"/>
+          </svg>
+          <span className="logo-text">SIAPB</span>
         </Link>
 
-        {/* Hamburger Button */}
+        {/* Hamburguesa */}
         <button
           className={`hamburger ${isOpen ? "active" : ""}`}
-          onClick={toggleMenu}
+          onClick={() => setIsOpen(o => !o)}
           aria-label="Toggle menu"
         >
-          <span></span>
-          <span></span>
-          <span></span>
+          <span /><span /><span />
         </button>
 
-        {/* Menu Items */}
+        {/* Menú */}
         <ul className={`nav-menu ${isOpen ? "active" : ""}`}>
-          {menuItems.map((item) => (
-            <li key={item.path} className="nav-item">
-              <Link
-                to={item.path}
-                className="nav-link"
-                activeProps={{ className: "nav-link active" }}
-                onClick={() => setIsOpen(false)}
-              >
+          {menuItems.map(item => (
+            <li key={item.href}>
+              <a href={item.href} className="nav-link" onClick={() => setIsOpen(false)}>
                 {item.label}
-              </Link>
+              </a>
             </li>
           ))}
         </ul>
+
+        {/* CTA */}
+        <Link to="/dashboard" className="login-btn" onClick={() => setIsOpen(false)}>
+          Acceder al sistema
+        </Link>
+
       </div>
     </nav>
   );
-};
-
-export default Navbar;
+}

@@ -1,0 +1,16 @@
+import { useJsonBinCollection } from "./useJsonBinCollection";
+
+const ADMIN_URL = "https://api.jsonbin.io/v3/b/6a0cfe5aee5a733b12e919a5";
+const ADMIN_URLS = [ADMIN_URL];
+const ADMIN_KEY_ENVS = ["VITE_JSON_MASTER_KEY"];
+
+export function useAdminUsers() {
+  return useJsonBinCollection({
+    keyEnvNames: ADMIN_KEY_ENVS,
+    fixedUrls: ADMIN_URLS,
+    selectItems: (payload) => payload?.record || [],
+    loadErrorMessage: "Error al cargar usuarios.",
+    saveErrorMessage: "No se pudo guardar la edición.",
+  });
+}
+

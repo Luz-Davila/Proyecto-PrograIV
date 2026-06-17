@@ -1,19 +1,19 @@
 import './Admin.css'
-import { useEffect, useState, useMemo } from 'react'
+import { useEffect, useState } from 'react'
+import DashboardLayout from "../../Components/DashboardLayout/DashboardLayout";
+import axios from 'axios'
+
+const BIN_URL =
+  'https://api.jsonbin.io/v3/b/6a0cfe5aee5a733b12e919a5'
 
 function Admin() {
 
   const [users, setUsers] = useState([])
 
-  const [search, setSearch] = useState('')
+  const [filteredUsers, setFilteredUsers] =
+    useState([])
 
-  const filteredUsers = useMemo(() => {
-    return users.filter((user) =>
-      (user.name || '')
-        .toLowerCase()
-        .includes(search.toLowerCase())
-    )
-  }, [users, search])
+  const [search, setSearch] = useState('')
 
   const [loading, setLoading] =
     useState(true)
@@ -24,10 +24,16 @@ function Admin() {
   const [visible, setVisible] =
     useState(10)
 
+  const [editingId, setEditingId] =
+    useState(null)
+
+  const [editedUser, setEditedUser] =
+    useState({})
+
   useEffect(() => {
 
-    fetch(
-      'https://api.jsonbin.io/v3/b/6a0cfe5aee5a733b12e919a5',
+    axios.get(
+      BIN_URL,
       {
 
         headers: {
@@ -42,21 +48,15 @@ function Admin() {
       }
     )
 
-      .then((res) => {
+      .then((response) => {
 
-        if (!res.ok) {
+        const data =
+          response.data.record ||
+          response.data
 
-          throw new Error(
-            'Error al cargar usuarios'
-          )
-        }
+        setUsers(data)
 
-        return res.json()
-      })
-
-      .then((data) => {
-
-        setUsers(data.record)
+        setFilteredUsers(data)
 
         setLoading(false)
       })
@@ -72,12 +72,92 @@ function Admin() {
 
   }, [])
 
-  
+  useEffect(() => {
+
+    const filtered = users.filter((user) =>
+
+      (user.name || '')
+        .toLowerCase()
+        .includes(search.toLowerCase())
+    )
+
+    setFilteredUsers(filtered)
+
+  }, [search, users])
 
   const getCedula = (user) => {
+
     return (
-      user.cedula || user.ci || user.cedulaNumber || user.cedula_numero || user.cedulaNumero || user.idNumber || 'N/A'
+      user.cedula ||
+      user.ci ||
+      user.cedulaNumber ||
+      user.cedula_numero ||
+      user.cedulaNumero ||
+      user.idNumber ||
+      'N/A'
     )
+  }
+
+  const handleEdit = (user) => {
+
+    setEditingId(user.email)
+
+    setEditedUser({
+
+      name: user.name || '',
+
+      email: user.email || '',
+
+      role: user.role || ''
+    })
+  }
+
+  const handleSave = async (email) => {
+
+    const updatedUsers = users.map((user) =>
+
+      user.email === email
+        ? {
+            ...user,
+            ...editedUser
+          }
+        : user
+    )
+
+    try {
+
+      await axios.put(
+
+        BIN_URL,
+
+        updatedUsers,
+
+        {
+
+          headers: {
+
+            'Content-Type':
+              'application/json',
+
+            'X-Master-Key':
+              import.meta.env
+                .VITE_JSON_MASTER_KEY
+          }
+        }
+      )
+
+      setUsers(updatedUsers)
+
+      setEditingId(null)
+
+    } catch (error) {
+
+      console.log(error)
+
+      alert(
+        'No se pudo guardar la edición'
+      )
+    }
   }
 
   if (loading) {
@@ -108,7 +188,7 @@ function Admin() {
 
   return (
 
-    <main className="admin">
+    <DashboardLayout title="Gestión Administrativa">
 
       {/* HEADER */}
       <section className="admin-header">
@@ -118,7 +198,9 @@ function Admin() {
         </h1>
 
         <p>
-          Administración de usuarios, busqueda, edición y más sobre los usuarios ingresados.
+          Administración de usuarios,
+          búsqueda, edición y más sobre
+          los usuarios ingresados.
         </p>
 
       </section>
@@ -137,7 +219,7 @@ function Admin() {
 
       </section>
 
-      {/* GRID USUARIOS */}
+      {/* GRID */}
       <section className="users-grid">
 
         {filteredUsers.length === 0 ? (
@@ -154,32 +236,162 @@ function Admin() {
 
               <article
                 className="user-card"
-                key={user.id}
+                key={user.email}
               >
 
                 <div className="user-card-body">
 
-                  <h2 className="user-name">{user.name}</h2>
+                  {editingId === user.email ? (
 
-                  <div className="user-field">
-                    <label>Cédula</label>
-                    <div className="user-value">{getCedula(user)}</div>
-                  </div>
+                    <>
 
-                  <div className="user-field">
-                    <label>Correo</label>
-                    <div className="user-value">{user.email || '—'}</div>
-                  </div>
+                      <div className="user-field">
 
-                  <div className="user-field">
-                    <label>Rol</label>
-                    <div className="user-value role">{user.role || '—'}</div>
-                  </div>
+                        <label>
+                          Nombre
+                        </label>
+
+                        <input
+                          type="text"
+                          value={editedUser.name}
+                          onChange={(e) =>
+                            setEditedUser({
+                              ...editedUser,
+                              name:
+                                e.target.value
+                            })
+                          }
+                        />
+
+                      </div>
+
+                      <div className="user-field">
+
+                        <label>
+                          Correo
+                        </label>
+
+                        <input
+                          type="text"
+                          value={editedUser.email}
+                          onChange={(e) =>
+                            setEditedUser({
+                              ...editedUser,
+                              email:
+                                e.target.value
+                            })
+                          }
+                        />
+
+                      </div>
+
+                      <div className="user-field">
+
+                        <label>
+                          Rol
+                        </label>
+
+                        <select
+                          value={editedUser.role}
+                          onChange={(e) =>
+                            setEditedUser({
+                              ...editedUser,
+                              role:
+                                e.target.value
+                            })
+                          }
+                        >
+
+                          <option value="Administrativo">
+                            Administrativo
+                          </option>
+
+                          <option value="Abonado">
+                            Abonado
+                          </option>
+
+                          <option value="Fontanero">
+                            Fontanero
+                          </option>
+
+                          <option value="Junta Directiva">
+                            Junta Directiva
+                          </option>
+
+                        </select>
+
+                      </div>
+
+                    </>
+
+                  ) : (
+
+                    <>
+
+                      <h2 className="user-name">
+                        {user.name}
+                      </h2>
+
+                      <div className="user-field">
+
+                        <label>
+                          Cédula
+                        </label>
+
+                        <div className="user-value">
+                          {getCedula(user)}
+                        </div>
+
+                      </div>
+
+                      <div className="user-field">
+
+                        <label>
+                          Correo
+                        </label>
+
+                        <div className="user-value">
+                          {user.email || '—'}
+                        </div>
+
+                      </div>
+
+                      <div className="user-field">
+
+                        <label>
+                          Rol
+                        </label>
+
+                        <div className="user-value role">
+                          {user.role || '—'}
+                        </div>
+
+                      </div>
+
+                    </>
+
+                  )}
 
                 </div>
 
                 <div className="user-card-actions">
-                  <button className="edit-btn">Editar</button>
+
+                  <button
+                    className="edit-btn"
+                    onClick={() =>
+
+                      editingId === user.email
+                        ? handleSave(user.email)
+                        : handleEdit(user)
+                    }
+                  >
+
+                    {editingId === user.email
+                      ? 'Guardar'
+                      : 'Editar'}
+
+                  </button>
+
                 </div>
 
               </article>
@@ -189,7 +401,7 @@ function Admin() {
 
       </section>
 
-      {/* BOTÓN VER MÁS */}
+      {/* VER MÁS */}
       {visible < filteredUsers.length && (
 
         <button
@@ -205,7 +417,7 @@ function Admin() {
 
       )}
 
-    </main>
+    </DashboardLayout>
   )
 }
 

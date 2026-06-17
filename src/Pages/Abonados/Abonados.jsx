@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import DashboardLayout from "../../Components/DashboardLayout/DashboardLayout";
 import {
   useReactTable,
   getCoreRowModel,
@@ -8,61 +9,24 @@ import {
   flexRender,
 } from "@tanstack/react-table";
 import { useForm } from "@tanstack/react-form";
+import { useAbonados } from "../../Hooks/useAbonados";
 import "./Abonados.css";
 
-const BIN_URL = 
-"https://api.jsonbin.io/v3/b/6a05c1c6c0954111d82171f8";
-
-function getKey() {
-  return import.meta.env.VITE_JSONBIN_MASTER_KEY;
-}
-
-async function fetchAbonados() {
-  const res = await fetch(BIN_URL, {
-    headers: { "X-Master-Key": getKey() },
-  });
-
-  if (!res.ok) {
-    throw new Error(`HTTP ${res.status}`);
-  }
-
-  const data = await res.json();
-  return data.record || [];
-}
-
-async function saveAbonados(lista) {
-  const res = await fetch(BIN_URL, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-      "X-Master-Key": getKey(),
-    },
-    body: JSON.stringify(lista),
-  });
-
-  if (!res.ok) {
-    throw new Error(`HTTP ${res.status}`);
-  }
-
-}
-
 export default function Abonados() {
-    console.log("KEY:", getKey());
-console.log("LENGTH:", getKey()?.length);
-  const [abonados, setAbonados] = useState([]);
+ const {
+  data: abonados,
+  loading,
+  error,
+  save: saveAbonados,
+  reload,
+} = useAbonados();
   const [editando, setEditando] = useState(null); 
   const [globalFilter, setGlobalFilter] = useState("");
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const [guardando, setGuardando] = useState(false);
 
-  // ── Cargar datos ──────────────────────────────────────────────────────────
   useEffect(() => {
-    fetchAbonados()
-      .then(setAbonados)
-      .catch(() => setError("No se pudieron cargar los abonados."))
-      .finally(() => setLoading(false));
-  }, []);
+    void reload();
+  }, [reload]);
 
   // ── TanStack Form ─────────────────────────────────────────────────────────
   const form = useForm({
@@ -74,35 +38,23 @@ console.log("LENGTH:", getKey()?.length);
       telefono: "",
       estado: "Activo",
     },
-    onSubmit: async ({ value }) => {
-      setGuardando(true);
-      try {
-        let nuevaLista;
-
-        if (editando !== null) {
-          // Actualizar
-          nuevaLista = abonados.map((a) =>
-            a.id === editando ? { ...a, ...value } : a
-          );
-        } else {
-          // Crear
-          const nuevoId =
-            abonados.length > 0
-              ? Math.max(...abonados.map((a) => a.id)) + 1
-              : 1;
-          nuevaLista = [...abonados, { id: nuevoId, ...value }];
-        }
-
-        await saveAbonados(nuevaLista);
-        setAbonados(nuevaLista);
-        setEditando(null);
-        form.reset();
-      } catch {
-        setError("Error al guardar. Intente nuevamente.");
-      } finally {
-        setGuardando(false);
-      }
-    },
+ onSubmit: async ({ value }) => {
+  setGuardando(true);
+  try {
+    if (editando !== null) {
+      await saveAbonados(value, editando);
+    } else {
+      await saveAbonados(value);
+    }
+    setEditando(null);
+    form.reset();
+    await reload();
+  } catch (err) {
+    console.error(err);
+  } finally {
+    setGuardando(false);
+  }
+},
   });
 
   // Cargar datos del abonado al editar
@@ -190,10 +142,11 @@ console.log("LENGTH:", getKey()?.length);
 
   // ── Render ────────────────────────────────────────────────────────────────
   return (
-    <div className="abonados-wrapper">
-      {/* Header */}
-      <div className="abonados-header">
-        <h1>Módulo de Abonados</h1>
+    <DashboardLayout title="Módulo de Abonados">
+      <div className="abonados-wrapper">
+        {/* Header */}
+        <div className="abonados-header">
+          <h1>Módulo de Abonados</h1>
       </div>
 
       {/* Formulario */}
@@ -418,5 +371,6 @@ console.log("LENGTH:", getKey()?.length);
         </div>
       )}
     </div>
+ </DashboardLayout>
   );
 }

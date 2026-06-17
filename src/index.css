@@ -125,3 +125,7 @@ a:hover {
 ::-webkit-scrollbar-thumb:hover { background: var(--sky-300); }
 
 ::selection { background: var(--sky-100); color: var(--sky-900); }
+
+html { 
+  scroll-behavior: smooth;
+}
