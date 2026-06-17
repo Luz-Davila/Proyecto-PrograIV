@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-
+import DashboardLayout from "../../Components/DashboardLayout/DashboardLayout";
 function Inventario() {
   const [data, setData] = useState([]);
   const [search, setSearch] = useState("");
@@ -135,8 +135,9 @@ console.log(url, key);
   };
 
   return (
-    <div style={{ padding: "20px", fontFamily: "Arial" }}>
-      <h1 style={{ textAlign: "center" }}>Inventario ASADA</h1>
+    <DashboardLayout title="Inventario ASADA">
+      <div style={{ padding: "20px", fontFamily: "Arial" }}>
+        <h1 style={{ textAlign: "center" }}>Inventario ASADA</h1>
 
       {/*  Agregar */}
       <button onClick={agregarProducto}>➕ Agregar producto</button>
@@ -243,6 +244,7 @@ console.log(url, key);
           ))}
       </div>
     </div>
+  </DashboardLayout> 
   );
 }
 

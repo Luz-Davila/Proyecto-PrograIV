@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import DashboardLayout from "../../Components/DashboardLayout/DashboardLayout";
 import {
   useReactTable,
   getCoreRowModel,
@@ -141,10 +142,11 @@ export default function Abonados() {
 
   // ── Render ────────────────────────────────────────────────────────────────
   return (
-    <div className="abonados-wrapper">
-      {/* Header */}
-      <div className="abonados-header">
-        <h1>Módulo de Abonados</h1>
+    <DashboardLayout title="Módulo de Abonados">
+      <div className="abonados-wrapper">
+        {/* Header */}
+        <div className="abonados-header">
+          <h1>Módulo de Abonados</h1>
       </div>
 
       {/* Formulario */}
@@ -369,5 +371,6 @@ export default function Abonados() {
         </div>
       )}
     </div>
+ </DashboardLayout>
   );
 }

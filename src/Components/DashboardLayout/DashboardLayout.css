@@ -1,0 +1,121 @@
+.dl-layout {
+  display: flex;
+  min-height: 100vh;
+  background: #f0f4f8;
+}
+
+.dl-content {
+  margin-left: 240px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  transition: margin-left 0.25s ease;
+}
+
+.dl-content--expanded {
+  margin-left: 68px;
+}
+
+.dl-topbar {
+  height: 64px;
+  background: #fff;
+  border-bottom: 1px solid #e3eaf3;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2rem;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  gap: 1rem;
+}
+
+.dl-topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  overflow: hidden;
+}
+
+.dl-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1a2e4a;
+  margin: 0;
+  white-space: nowrap;
+}
+
+.dl-menu-btn {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.3rem;
+  color: #546e7a;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+
+.dl-menu-btn svg { width: 22px; height: 22px; }
+
+.dl-back-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: #f0f4f8;
+  border: 1.5px solid #e3eaf3;
+  border-radius: 8px;
+  padding: 0.4rem 0.9rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #0d47a1;
+  cursor: pointer;
+  transition: all 0.18s;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.dl-back-btn:hover {
+  background: #e3f2fd;
+  border-color: #0288d1;
+}
+
+.dl-back-btn svg { width: 16px; height: 16px; }
+
+.dl-logout {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: none;
+  border: 1.5px solid #e3eaf3;
+  border-radius: 8px;
+  padding: 0.45rem 1rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #546e7a;
+  cursor: pointer;
+  transition: all 0.18s;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.dl-logout:hover {
+  border-color: #c62828;
+  color: #c62828;
+  background: #ffebee;
+}
+
+.dl-logout svg { width: 17px; height: 17px; }
+
+.dl-main {
+  padding: 2rem;
+  flex: 1;
+}
+
+@media (max-width: 768px) {
+  .dl-content { margin-left: 0 !important; }
+  .dl-menu-btn { display: flex; }
+  .dl-topbar { padding: 0 1rem; }
+  .dl-main { padding: 1rem; }
+  .dl-title { display: none; }
+}
