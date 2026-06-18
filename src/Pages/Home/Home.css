@@ -330,6 +330,12 @@ body { font-family: var(--font); }
   font-size: 1rem;
 }
 
+.averias-form-container {
+  max-width: 600px;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
 /* ── Transparencia ── */
 .transparencia-section { background: var(--white); }
 
@@ -480,4 +486,5 @@ body { font-family: var(--font); }
   .carousel { flex-direction: column; }
   .map-inner { flex-direction: column; }
   .contact-panel { flex: 1 1 100%; }
+  .averias-form-container { padding: 0 4vw; }
 }
