@@ -3,8 +3,8 @@ import { useEffect, useState } from 'react'
 import DashboardLayout from "../../Components/DashboardLayout/DashboardLayout";
 import axios from 'axios'
 
-const BIN_URL =
-  'https://api.jsonbin.io/v3/b/6a0cfe5aee5a733b12e919a5'
+const API_URL =
+  'https://backend-proyecto.tryasp.net/api/Admin'
 
 function Admin() {
 
@@ -32,45 +32,29 @@ function Admin() {
 
   useEffect(() => {
 
-    axios.get(
-      BIN_URL,
-      {
+  axios.get(API_URL)
 
-        headers: {
+    .then((response) => {
 
-          'X-Master-Key':
-            import.meta.env
-              .VITE_JSON_MASTER_KEY,
+      const data = response.data
 
-          'Content-Type':
-            'application/json'
-        }
-      }
-    )
+      setUsers(data)
 
-      .then((response) => {
+      setFilteredUsers(data)
 
-        const data =
-          response.data.record ||
-          response.data
+      setLoading(false)
+    })
 
-        setUsers(data)
+    .catch((error) => {
 
-        setFilteredUsers(data)
+      console.log(error)
 
-        setLoading(false)
-      })
+      setError(true)
 
-      .catch((error) => {
+      setLoading(false)
+    })
 
-        console.log(error)
-
-        setError(true)
-
-        setLoading(false)
-      })
-
-  }, [])
+}, [])
 
   useEffect(() => {
 
@@ -101,64 +85,43 @@ function Admin() {
   const handleEdit = (user) => {
 
     setEditingId(user.email)
-
     setEditedUser({
-
+      id: user.id,
       name: user.name || '',
-
+      cedula: user.cedula || '',
       email: user.email || '',
-
       role: user.role || ''
     })
   }
 
-  const handleSave = async (email) => {
+  const handleSave = async () => {
 
-    const updatedUsers = users.map((user) =>
+  try {
 
-      user.email === email
-        ? {
-            ...user,
-            ...editedUser
-          }
+    const response = await axios.put(
+      `${API_URL}/${editedUser.id}`,
+      editedUser
+    )
+
+    const updatedUser = response.data
+
+    const updatedUsers = users.map(user =>
+      user.id === updatedUser.id
+        ? updatedUser
         : user
     )
 
-    try {
+    setUsers(updatedUsers)
 
-      await axios.put(
+    setEditingId(null)
 
-        BIN_URL,
+  } catch (error) {
 
-        updatedUsers,
+    console.log(error)
 
-        {
-
-          headers: {
-
-            'Content-Type':
-              'application/json',
-
-            'X-Master-Key':
-              import.meta.env
-                .VITE_JSON_MASTER_KEY
-          }
-        }
-      )
-
-      setUsers(updatedUsers)
-
-      setEditingId(null)
-
-    } catch (error) {
-
-      console.log(error)
-
-      alert(
-        'No se pudo guardar la edición'
-      )
-    }
+    alert('No se pudo guardar la edición')
   }
+}
 
   if (loading) {
 
@@ -381,8 +344,8 @@ function Admin() {
                     onClick={() =>
 
                       editingId === user.email
-                        ? handleSave(user.email)
-                        : handleEdit(user)
+                      ? handleSave()
+                      : handleEdit(user)
                     }
                   >
 
